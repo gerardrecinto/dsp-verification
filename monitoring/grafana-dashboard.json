@@ -1,0 +1,10 @@
+{
+  "title": "DV regression health",
+  "schemaVersion": 39,
+  "panels": [
+    {"type": "stat", "title": "Clean-design failures", "gridPos": {"x": 0, "y": 0, "w": 6, "h": 4}, "targets": [{"expr": "dv_regression_failures"}]},
+    {"type": "stat", "title": "Functional coverage %", "gridPos": {"x": 6, "y": 0, "w": 6, "h": 4}, "targets": [{"expr": "dv_coverage_percent"}]},
+    {"type": "stat", "title": "Mutation score %", "gridPos": {"x": 12, "y": 0, "w": 6, "h": 4}, "targets": [{"expr": "dv_mutation_score_percent"}]},
+    {"type": "timeseries", "title": "Regression time (s)", "gridPos": {"x": 0, "y": 4, "w": 18, "h": 8}, "targets": [{"expr": "dv_regression_seconds"}]}
+  ]
+}

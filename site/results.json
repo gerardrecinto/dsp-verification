@@ -1,0 +1,111 @@
+{
+  "seeds": 20,
+  "clean_failures": 0,
+  "tests_per_seed": 9,
+  "coverage": {
+    "percent": 100.0,
+    "hits": {
+      "input.zero": 2339,
+      "input.small": 17435,
+      "input.mid": 12414,
+      "input.full_pos": 5050,
+      "input.full_neg": 5017,
+      "valid.back_to_back": 33621,
+      "valid.gap_1": 4154,
+      "valid.gap_long": 4480,
+      "sat.none": 38660,
+      "sat.pos": 1762,
+      "sat.neg": 1667,
+      "coef_write.0": 747,
+      "coef_write.1": 773,
+      "coef_write.2": 807,
+      "coef_write.3": 836,
+      "reset.mid_stream": 233,
+      "coef_write.while_streaming": 1727,
+      "cross.sat_pos_back_to_back": 1762,
+      "cross.sat_neg_back_to_back": 1667,
+      "boundary.exact_min": 40,
+      "boundary.exact_max": 40
+    }
+  },
+  "mutants": {
+    "BUG_WRAP": {
+      "why": "no saturation, output wraps around",
+      "killed": true,
+      "caught_by": [
+        "test_boundary_values",
+        "test_constrained_random",
+        "test_saturation_corners"
+      ]
+    },
+    "BUG_SATNEG": {
+      "why": "negative clamp one code too early",
+      "killed": true,
+      "caught_by": [
+        "test_boundary_values"
+      ]
+    },
+    "BUG_SHIFT": {
+      "why": "logical shift on a signed sum",
+      "killed": true,
+      "caught_by": [
+        "test_boundary_values",
+        "test_coefficient_update_while_streaming",
+        "test_constrained_random",
+        "test_every_coefficient_slot",
+        "test_saturation_corners"
+      ]
+    },
+    "BUG_TAP": {
+      "why": "off-by-one tap reads the wrong delay",
+      "killed": true,
+      "caught_by": [
+        "test_coefficient_update_while_streaming",
+        "test_constrained_random",
+        "test_every_coefficient_slot",
+        "test_impulse_response",
+        "test_reset_mid_stream"
+      ]
+    },
+    "BUG_COEF": {
+      "why": "coefficient 3 cannot be written",
+      "killed": true,
+      "caught_by": [
+        "test_coefficient_update_while_streaming",
+        "test_constrained_random",
+        "test_every_coefficient_slot",
+        "test_impulse_response",
+        "test_reset_mid_stream",
+        "test_saturation_corners"
+      ]
+    },
+    "BUG_RESET": {
+      "why": "delay line survives reset",
+      "killed": true,
+      "caught_by": [
+        "test_boundary_values",
+        "test_coefficient_update_while_streaming",
+        "test_constrained_random",
+        "test_every_coefficient_slot",
+        "test_impulse_response",
+        "test_reset_mid_stream",
+        "test_saturation_corners"
+      ]
+    },
+    "BUG_VALID": {
+      "why": "every fourth output valid is dropped",
+      "killed": true,
+      "caught_by": [
+        "test_boundary_values",
+        "test_coefficient_update_while_streaming",
+        "test_constrained_random",
+        "test_every_coefficient_slot",
+        "test_impulse_response",
+        "test_reset_mid_stream",
+        "test_saturation_corners"
+      ]
+    }
+  },
+  "mutation_score": 100.0,
+  "seconds": 164.2
+}

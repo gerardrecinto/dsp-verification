@@ -1,0 +1,24 @@
+groups:
+  - name: dv-regression
+    rules:
+      - alert: RegressionFailing
+        expr: dv_regression_failures > 0
+        for: 0m
+        labels: {severity: page}
+        annotations:
+          summary: the clean design fails at least one test
+          runbook: docs/RUNBOOK.md#regression-failing
+      - alert: MutantSurvived
+        expr: dv_mutation_score_percent < 100
+        for: 0m
+        labels: {severity: ticket}
+        annotations:
+          summary: a planted bug passed every test, so the testbench has a hole
+          runbook: docs/RUNBOOK.md#mutant-survived
+      - alert: CoverageBelowGoal
+        expr: dv_coverage_percent < 100
+        for: 0m
+        labels: {severity: ticket}
+        annotations:
+          summary: functional coverage is below 100 percent
+          runbook: docs/RUNBOOK.md#coverage-below-goal

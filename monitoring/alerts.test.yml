@@ -1,0 +1,26 @@
+rule_files: [alerts.yml]
+evaluation_interval: 1m
+tests:
+  - interval: 1m
+    input_series:
+      - {series: 'dv_regression_failures', values: '0 0 2 2'}
+      - {series: 'dv_mutation_score_percent', values: '100 100 85.7 85.7'}
+      - {series: 'dv_coverage_percent', values: '100 100 100 94.7'}
+    alert_rule_test:
+      - {eval_time: 1m, alertname: RegressionFailing, exp_alerts: []}
+      - eval_time: 2m
+        alertname: RegressionFailing
+        exp_alerts:
+          - exp_labels: {severity: page}
+            exp_annotations: {summary: the clean design fails at least one test, runbook: docs/RUNBOOK.md#regression-failing}
+      - eval_time: 2m
+        alertname: MutantSurvived
+        exp_alerts:
+          - exp_labels: {severity: ticket}
+            exp_annotations: {summary: "a planted bug passed every test, so the testbench has a hole", runbook: docs/RUNBOOK.md#mutant-survived}
+      - eval_time: 3m
+        alertname: CoverageBelowGoal
+        exp_alerts:
+          - exp_labels: {severity: ticket}
+            exp_annotations: {summary: functional coverage is below 100 percent, runbook: docs/RUNBOOK.md#coverage-below-goal}
+      - {eval_time: 1m, alertname: CoverageBelowGoal, exp_alerts: []}

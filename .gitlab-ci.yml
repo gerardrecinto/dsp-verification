@@ -1,0 +1,14 @@
+# Same pipeline as .github/workflows/ci.yml for GitLab runners.
+stages: [verify]
+
+regression:
+  stage: verify
+  image: python:3.12-slim-bookworm
+  before_script:
+    - apt-get update && apt-get install -y --no-install-recommends iverilog make g++
+    - pip install cocotb==1.9.2
+  script:
+    - python dv/regress.py --seeds 20
+  artifacts:
+    when: always
+    paths: [results/summary.json, results/dv.prom]

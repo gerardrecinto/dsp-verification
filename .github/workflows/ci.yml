@@ -1,0 +1,39 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t dsp-verification .
+      - name: Regression, 20 seeds and 7 planted bugs
+        run: docker run --rm --user root -v "$PWD:/dv" -w /dv dsp-verification python dv/regress.py --seeds 20
+  alerts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          docker run --rm --entrypoint promtool -v "$PWD/monitoring:/m" -w /m prom/prometheus:v2.55.1 check rules alerts.yml
+          docker run --rm --entrypoint promtool -v "$PWD/monitoring:/m" -w /m prom/prometheus:v2.55.1 test rules alerts.test.yml
+      - run: python3 -c "import json;json.load(open('monitoring/grafana-dashboard.json'))"
+  kubernetes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t dsp-verification:0.1.0 .
+      - uses: helm/kind-action@v1
+        with: {cluster_name: dv}
+      - run: |
+          helm lint charts/dv-regression
+          kind load docker-image dsp-verification:0.1.0 --name dv
+          helm install nightly charts/dv-regression --set seeds=3 --set mutantSeeds=1
+          kubectl create job manual --from=cronjob/nightly
+          kubectl wait --for=condition=complete job/manual --timeout=600s || (kubectl logs job/manual; exit 1)
+          kubectl logs job/manual | tee /tmp/job.log
+          grep -q '"mutation_score": 100.0' /tmp/job.log
