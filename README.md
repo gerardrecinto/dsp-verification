@@ -33,7 +33,7 @@ Without Docker: install Icarus Verilog and `pip install cocotb==1.9.2`, then `ma
 
 - **Cycle-accurate scoreboard, not an end-of-test check.** A mismatch is reported on the clock it happens, with expected and actual. Cost: the model must mirror the pipeline registers, so a change to the RTL's timing changes the model too.
 - **Mutation testing on top of coverage.** Coverage says what the stimulus touched; planted bugs say whether the checks would notice. The first full run caught 6 of 7. `BUG_SATNEG` survived because no test produced an output of exactly -32768 (the directed case landed on -32767). The boundary test was added and all 7 are caught. Cost: each bug is another compile and run.
-- **cocotb and Icarus.** Python tests and an open-source simulator keep the flow runnable by anyone. Cost: it is not UVM and has no SystemVerilog assertions or formal proof.
+- **cocotb and Icarus.** Python tests and an open-source simulator keep the flow runnable by anyone. Cost: simulation coverage only, with no SystemVerilog assertions.
 
 ## What is verified
 
@@ -42,9 +42,9 @@ Without Docker: install Icarus Verilog and `pip install cocotb==1.9.2`, then `ma
 
 MIT licensed.
 
-## Educational microprocessor and EDA flow demo
+## Microprocessor and EDA flow demo
 
-`microcpu/` contains a deliberately small, single-issue, in-order 8-bit CPU with ADD-immediate, XOR-immediate, NOP, and HALT instructions. It demonstrates RTL simulation and a self-checking testbench, not high-performance processor design or silicon implementation.
+`microcpu/` contains a single-issue, in-order 8-bit CPU with ADD-immediate, XOR-immediate, NOP, and HALT instructions. It demonstrates RTL simulation with a self-checking testbench.
 
 Run with Icarus Verilog:
 
