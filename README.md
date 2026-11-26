@@ -41,3 +41,15 @@ Without Docker: install Icarus Verilog and `pip install cocotb==1.9.2`, then `ma
 - **Not done:** no UVM, no SystemVerilog assertions, no formal verification, no gate-level or timing simulation, no real silicon. The block is small. The GitLab pipeline has not run on a GitLab runner. The site runs a JavaScript port of the filter, checked against the Python model (131 cycles, 0 mismatches); the Verilog itself runs only in the CI regression.
 
 MIT licensed.
+
+## Educational microprocessor and EDA flow demo
+
+`microcpu/` contains a deliberately small, single-issue, in-order 8-bit CPU with ADD-immediate, XOR-immediate, NOP, and HALT instructions. It demonstrates RTL simulation and a self-checking testbench, not high-performance processor design or silicon implementation.
+
+Run with Icarus Verilog:
+
+```bash
+make microcpu-demo
+```
+
+The demo checks reset, instruction behavior, and HALT state. It has no pipeline, cache, timing closure, synthesis results, or PPA measurements. The source uses standard Verilog constructs and can be explored in a Cadence simulator, but Cadence tools were not used to validate it; no Cadence scripts or tool-specific flow are included.

@@ -37,3 +37,9 @@ jobs:
           kubectl wait --for=condition=complete job/manual --timeout=600s || (kubectl logs job/manual; exit 1)
           kubectl logs job/manual | tee /tmp/job.log
           grep -q '"mutation_score": 100.0' /tmp/job.log
+  microcpu-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y iverilog
+      - run: make microcpu-demo
